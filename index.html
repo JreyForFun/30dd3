@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Format Converter</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@0.3.1/dist/basecoat.cdn.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    .progress-container {
+      background-color: var(--container-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      height: 10px;
+      overflow: hidden;
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+
+    .progress-bar {
+      background-color: var(--text-color);
+      height: 100%;
+      width: 0%;
+      transition: width 0.2s ease;
+    }
+
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .flex-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .w-full {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-container">
+    <div class="side-panel left-panel"></div>
+
+    <main class="main-content">
+      <header class="app-header">
+        <h1 class="app-title">Image Format Converter</h1>
+        <p class="app-subtitle">Convert your image into another format!</p>
+      </header>
+
+      <div class="content-container">
+        <div id="drop-zone" class="drop-zone">
+          <div class="drop-content">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="upload-icon">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <p class="drop-text">Drag images here or click to browse</p>
+            <p class="help-text">Supports: JPG, PNG, WebP, GIF, BMP</p>
+            <input type="file" id="file-input" accept="image/png, image/jpeg, image/webp, image/gif, image/bmp" multiple
+              hidden>
+            <button id="browse-btn" class="btn" onclick="document.getElementById('file-input').click()">Browse
+              Files</button>
+          </div>
+        </div>
+
+        <div class="settings-container">
+          <div class="setting-group">
+            <label class="setting-label">Target Format</label>
+            <select id="format-select" class="select">
+              <option value="image/jpeg">JPG</option>
+              <option value="image/png">PNG</option>
+              <option value="image/webp">WebP</option>
+            </select>
+          </div>
+
+          <div class="setting-group quality-wrapper" id="quality-control">
+            <label class="setting-label">Quality <span id="quality-value">(90%) - High</span></label>
+            <div class="h-[36px] flex items-center">
+              <input type="range" id="quality-slider" min="0.1" max="1" step="0.1" value="0.9" class="range">
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <label class="setting-label">Resize (Optional)</label>
+            <div class="resize-inputs">
+              <input type="number" id="resize-width" placeholder="W" class="input resize-input">
+              <span class="separator">x</span>
+              <input type="number" id="resize-height" placeholder="H" class="input resize-input">
+            </div>
+          </div>
+
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" id="maintain-aspect" class="checkbox" checked>
+              <span class="checkbox-text">Maintain Aspect</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" id="keep-name" class="checkbox" checked>
+              <span class="checkbox-text">Keep Name</span>
+            </label>
+          </div>
+        </div>
+
+        <div id="status-bar" class="file-status-bar hidden flex-col">
+          <div class="flex-between">
+            <span id="file-counter">0 images</span>
+            <span id="conversion-status">Ready</span>
+          </div>
+          <div id="progress-container" class="progress-container hidden">
+            <div id="progress-bar" class="progress-bar"></div>
+          </div>
+        </div>
+
+        <div id="preview-area" class="preview-grid custom-scrollbar">
+          <div class="empty-state">
+            <p>No images uploaded yet</p>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button id="clear-all-btn" class="btn hidden">Clear All</button>
+          <button id="convert-all-btn" class="btn hidden">Convert All</button>
+          <button id="download-all-btn" class="btn hidden">Download ZIP</button>
+        </div>
+
+      </div>
+    </main>
+
+    <div class="side-panel right-panel"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/basecoat-css@0.3.1/dist/js/all.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
