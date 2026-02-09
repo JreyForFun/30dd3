@@ -1,2 +1,1 @@
-# 30dd3
-Image Format Converter - 30 Simple Useful Wep App in 30 Days
+# Image Format Converter - 30 Simple Useful Wep App in 30 Days - Day 3
